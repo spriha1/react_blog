@@ -2,10 +2,17 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import article from "../services/articleService";
 import Article from "./article";
+import DOMPurify from "dompurify";
+import parse from "html-react-parser";
 import _ from "lodash";
 
 class Home extends Component {
   state = {};
+
+  constructor(props) {
+    super(props);
+    this.searchRef = React.createRef();
+  }
 
   async componentDidMount() {
     const data = await article.getArticles();
@@ -38,6 +45,13 @@ class Home extends Component {
     // this.setState({ currentArticle });
   };
 
+  handleSearch = e => {
+    // e.preventDefault();
+    // console.log(this.searchRef.current.value);
+    const articles = article.searchArticle(this.searchRef.current.value);
+    // this.setState({ currentArticle: article });
+  };
+
   handleEdit = article => {};
 
   render() {
@@ -46,7 +60,58 @@ class Home extends Component {
     const pages = data ? _.range(1, data.last_page + 1) : [0];
     return (
       <div className="row">
-        <div className="col-md-6">
+        {currentArticle && (
+          <div className="col-md-9">
+            <form className="form-inline mb-2 mt-2">
+              <div className="input-group mb-2 mr-sm-2">
+                <input
+                  ref={this.searchRef}
+                  type="text"
+                  placeholder="Search"
+                  name="search"
+                  onChange={this.handleSearch}
+                />
+              </div>
+              {/* <button
+                type="submit"
+                className="btn btn-primary mb-2"
+                onClick={this.handleSearch}
+              >
+                Submit
+              </button> */}
+            </form>
+
+            <div className="card mb-2">
+              <div className="card-body">
+                <input type="hidden" name="id" value={currentArticle.id} />
+                <h5 className="card-title">{currentArticle.title}</h5>
+                <div className="card-text">
+                  {parse(DOMPurify.sanitize(currentArticle.details))}
+                </div>
+                {user && user.id == currentArticle.userId && (
+                  <React.Fragment>
+                    <Link to="#" className="btn btn-primary mr-2">
+                      Edit
+                    </Link>
+                    {/* <button
+                  className="btn btn-primary mr-2"
+                  onClick={() => onEdit(currentArticle)}
+                >
+                  Edit
+                </button> */}
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => this.handleDelete(currentArticle.id)}
+                    >
+                      Delete
+                    </button>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="col-md-3">
           {articles &&
             articles.map(article => (
               <Article
@@ -79,36 +144,6 @@ class Home extends Component {
             </ul>
           </nav>
         </div>
-        {currentArticle && (
-          <div className="col-md-6">
-            <div className="card mb-2">
-              <div className="card-body">
-                <input type="hidden" name="id" value={currentArticle.id} />
-                <h5 className="card-title">{currentArticle.title}</h5>
-                <p className="card-text">{currentArticle.details}</p>
-                {user && user.id == currentArticle.userId && (
-                  <React.Fragment>
-                    <Link to="#" className="btn btn-primary mr-2">
-                      Edit
-                    </Link>
-                    {/* <button
-                  className="btn btn-primary mr-2"
-                  onClick={() => onEdit(currentArticle)}
-                >
-                  Edit
-                </button> */}
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => this.handleDelete(currentArticle.id)}
-                    >
-                      Delete
-                    </button>
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

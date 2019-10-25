@@ -20,17 +20,17 @@ class Article extends Component {
           >
             Read More ...
           </button>
-          {user && user.id == article.userId && (
+          {/* {user && user.id == article.userId && (
             <React.Fragment>
               <Link to={url} className="btn btn-primary mr-2">
                 Edit
               </Link>
-              {/* <button
+              <button
                   className="btn btn-primary mr-2"
                   onClick={() => onEdit(article)}
                 >
                   Edit
-                </button> */}
+                </button>
               <button
                 className="btn btn-primary"
                 onClick={() => onDelete(article.id)}
@@ -38,7 +38,7 @@ class Article extends Component {
                 Delete
               </button>
             </React.Fragment>
-          )}
+          )} */}
         </div>
       </div>
     );

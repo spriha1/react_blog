@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
     Route::post('/register', 'Api\AuthController@register');
     Route::get('/articles', 'ArticleController@getArticles');
     Route::post('/upload', 'ArticleController@upload');
+    Route::post('/search', 'ArticleController@search');
     
     // private routes
     Route::middleware('auth:api')->group(function () {

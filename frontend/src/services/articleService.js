@@ -43,31 +43,27 @@ export async function addArticle(article) {
 }
 
 export async function updateArticle(article) {
-  const { data, status } = await http.put(apiEndpoint);
-  await toaster(status);
-
-  //   if (status !== 200) {
-  //     toast.error("There is an error in updating the post !!!");
-  //   } else {
-  //     toast.success("Post updated successfully");
-  //   }
+  const { data, status } = await http.put(apiEndpoint, article);
 }
 
 export async function deleteArticle(id) {
   const { status } = await http.delete(apiEndpoint + "/" + id);
   await toaster(status);
-
-  //   if (status !== 200) {
-  //     toast.error("There is an error in deleting the post !!!");
-  //   } else {
-  //     toast.success("Post deleted successfully");
-  //   }
   return status;
+}
+
+export async function searchArticle(value) {
+  const apiEndpoint = "http://blogbackend.local.com/api/search";
+  //   const { data, status } = await http.post(apiEndpoint, { value: value });
+  const data = await http.post(apiEndpoint, { value: value });
+  console.log(data);
+  //   console.log(config.data);
 }
 
 export default {
   getArticles,
   addArticle,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  searchArticle
 };

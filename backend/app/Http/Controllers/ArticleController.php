@@ -53,4 +53,11 @@ class ArticleController extends Controller
     {
         return($request->all());
     }
+
+    public function search(Request $request)
+    {
+        return $request->input('search');
+        $articles = Article::where('title', 'like', $request->input('search') . '%')->get();
+        return response($articles, 200);
+    }
 }
