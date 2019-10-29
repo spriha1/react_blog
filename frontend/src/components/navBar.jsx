@@ -73,7 +73,7 @@ const NavBar = ({ user }) => {
               aria-expanded="false"
               aria-controls="navbarMenu"
             >
-              <span class="burger-lines"></span>
+              <span className="burger-lines"></span>
             </a>
             <h1 className="site-logo">
               <a>Wordify</a>

@@ -52,10 +52,11 @@ export async function deleteArticle(id) {
   return status;
 }
 
-export async function searchArticle(value) {
+export async function searchArticles(value) {
   const apiEndpoint = "http://blogbackend.local.com/api/search";
   //   const { data, status } = await http.post(apiEndpoint, { value: value });
-  const data = await http.post(apiEndpoint, { value: value });
+  const { data } = await http.post(apiEndpoint, { value: value });
+  return data;
   console.log(data);
   //   console.log(config.data);
 }
@@ -65,5 +66,5 @@ export default {
   addArticle,
   updateArticle,
   deleteArticle,
-  searchArticle
+  searchArticles
 };

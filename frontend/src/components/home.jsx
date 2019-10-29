@@ -5,9 +5,10 @@ import Article from "./article";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import _ from "lodash";
+import Select from "react-select";
 
 class Home extends Component {
-  state = {};
+  state = { currentArticle: {} };
 
   constructor(props) {
     super(props);
@@ -45,16 +46,21 @@ class Home extends Component {
     // this.setState({ currentArticle });
   };
 
-  handleSearch = e => {
-    // e.preventDefault();
-    // console.log(this.searchRef.current.value);
-    const articles = article.searchArticle(this.searchRef.current.value);
-    // this.setState({ currentArticle: article });
+  handleSearch = async e => {
+    const articles = await article.searchArticles(this.searchRef.current.value);
+    const searchArticles = [...articles];
+    console.log(searchArticles);
+    this.setState({ searchArticles });
+  };
+
+  handleSelect = selectedOption => {
+    this.setState({ currentArticle: selectedOption.value });
   };
 
   handleEdit = article => {};
 
   render() {
+    console.log(this.state.currentArticle);
     const { articles, data, currentPage, currentArticle } = this.state;
     const { user } = this.props;
     const pages = data ? _.range(1, data.last_page + 1) : [0];
@@ -70,6 +76,18 @@ class Home extends Component {
                   placeholder="Search"
                   name="search"
                   onChange={this.handleSearch}
+                />
+
+                <Select
+                  value={this.currentArticle}
+                  onChange={this.handleSelect}
+                  options={
+                    this.state.searchArticles &&
+                    this.state.searchArticles.map(a => ({
+                      label: a.title,
+                      value: a
+                    }))
+                  }
                 />
               </div>
               {/* <button
@@ -90,7 +108,7 @@ class Home extends Component {
                 </div>
                 {user && user.id == currentArticle.userId && (
                   <React.Fragment>
-                    <Link to="#" className="btn btn-primary mr-2">
+                    <Link to="#" className="btn btn-info mr-2">
                       Edit
                     </Link>
                     {/* <button
@@ -100,7 +118,7 @@ class Home extends Component {
                   Edit
                 </button> */}
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-danger"
                       onClick={() => this.handleDelete(currentArticle.id)}
                     >
                       Delete
