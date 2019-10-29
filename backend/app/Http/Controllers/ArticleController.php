@@ -31,11 +31,12 @@ class ArticleController extends Controller
 
     public function updateArticle(Request $request)
     {
-        $article = Article::find($request->id);
-
+        // return $request->articleId;
+        $article = Article::find($request->articleId);
+        // return $article;
         $article->title = $request->title;
         $article->details = $request->details;
-        $article->user_id = $request->userId;
+        $article->userId = $request->userId;
         $article->save();
 
         return response($article, 200);
@@ -56,8 +57,8 @@ class ArticleController extends Controller
 
     public function search(Request $request)
     {
-        // return $request->input('search');
-        $articles = Article::where('title', 'like', $request->input('search') . '%')->get();
+        // return $request->input('value');
+        $articles = Article::where('title', 'like', '%' . $request->input('value') . '%')->get();
         return response($articles, 200);
     }
 }

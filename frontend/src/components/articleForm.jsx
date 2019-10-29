@@ -13,7 +13,7 @@ import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 class ArticleForm extends Form {
   state = {
-    data: { title: "", details: "", userId: "", token: "" },
+    data: { title: "", details: "", userId: "", token: "", articleId: "" },
     errors: {}
   };
 
@@ -28,7 +28,14 @@ class ArticleForm extends Form {
 
   componentDidMount() {
     if (this.props.user) {
-      const data = { ...this.state.data };
+      if (this.props.formProps.match.params) {
+        var data = { ...this.state.data };
+        const { currentArticle } = this.props;
+        console.log(currentArticle);
+        data.title = currentArticle.title;
+        data.details = currentArticle.details;
+        data.articleId = currentArticle.id;
+      }
       data.userId = this.props.user.id;
       data.token = this.props.user.token;
       this.setState({ data });
@@ -60,10 +67,10 @@ class ArticleForm extends Form {
 
   render() {
     const { editorState } = this.state;
-    const { article } = this.props.match.params;
-    if (article) {
-      console.log("hi", article);
-    }
+    // const { article } = this.props.match.params;
+    // if (article) {
+    //   console.log("hi", article);
+    // }
 
     return (
       <div>
@@ -71,11 +78,14 @@ class ArticleForm extends Form {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("userId", "User Id", "text", true)}
           {this.renderInput("token", "Token", "text", true)}
+          {this.renderInput("articleId", "articleId", "text", true)}
+
           {this.renderInput("title", "Title")}
           <CKEditor
             editor={ClassicEditor}
-            // data={this.state.data}
+            // data={this.state.data.details}
             onInit={editor => {
+              editor.setData(this.state.data.details);
               // You can store the "editor" and use when it is needed.
             }}
             onChange={(event, editor) => {
@@ -98,7 +108,16 @@ class ArticleForm extends Form {
               }
             }}
           />
-          {this.renderButton("Add Article")}
+          {this.state.data.title && (
+            <button
+              type="button"
+              onClick={() => this.props.onEdit(this.state.data)}
+              className="btn btn-primary"
+            >
+              Update
+            </button>
+          )}
+          {!this.state.data.title && this.renderButton("Add Article")}
         </form>
       </div>
     );

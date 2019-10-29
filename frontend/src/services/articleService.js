@@ -38,12 +38,16 @@ function toaster(status) {
 }
 
 export async function addArticle(article) {
+  // console.log("post");
   const { data, status } = await http.post(apiEndpoint, article);
   await toaster(status);
+  return data;
 }
 
 export async function updateArticle(article) {
+  // console.log("put");
   const { data, status } = await http.put(apiEndpoint, article);
+  await toaster(status);
 }
 
 export async function deleteArticle(id) {
@@ -57,8 +61,8 @@ export async function searchArticles(value) {
   //   const { data, status } = await http.post(apiEndpoint, { value: value });
   const { data } = await http.post(apiEndpoint, { value: value });
   return data;
-  console.log(data);
-  //   console.log(config.data);
+  // console.log(data);
+  // console.log(config.data);
 }
 
 export default {

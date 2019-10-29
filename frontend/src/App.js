@@ -53,11 +53,17 @@ class App extends Component {
             <Route path="/contact" component={ContactForm}></Route>
             <Route path="/logout" component={Logout}></Route>
             {/* <Route path="/addArticle" component={ArticleForm}></Route> */}
-            <Route
+            {/* <Route
               path="/addArticle/:article?"
               render={props => user && <ArticleForm {...props} user={user} />}
-            ></Route>
+            ></Route> */}
             {/* <Route path="/" exact component={Home}></Route> */}
+            <Route
+              path="/addArticle/:article?"
+              render={props => (
+                <Home {...props} user={user} element={{ add: 1 }} />
+              )}
+            ></Route>
             <Route
               path="/"
               render={props => <Home {...props} user={user} />}
