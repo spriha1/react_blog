@@ -9,7 +9,7 @@ class Article extends Component {
     const url = `/addArticle/${btoa(JSON.stringify(article))}`;
 
     return (
-      <div className="card mb-2">
+      <div className="card mb-2 shadow p-3 mb-5 bg-white rounded">
         <div className="card-body">
           <input type="hidden" name="id" value={article.id} />
           <h5 className="card-title">{article.title}</h5>

@@ -31,10 +31,11 @@ class ArticleForm extends Form {
       if (this.props.formProps.match.params) {
         var data = { ...this.state.data };
         const { currentArticle } = this.props;
-        console.log(currentArticle);
-        data.title = currentArticle.title;
-        data.details = currentArticle.details;
-        data.articleId = currentArticle.id;
+        if (currentArticle) {
+          data.title = currentArticle.title;
+          data.details = currentArticle.details;
+          data.articleId = currentArticle.id;
+        }
       }
       data.userId = this.props.user.id;
       data.token = this.props.user.token;
@@ -73,7 +74,7 @@ class ArticleForm extends Form {
     // }
 
     return (
-      <div>
+      <div className="card mt-2 mb-2">
         <h1>Article</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("userId", "User Id", "text", true)}
@@ -108,7 +109,7 @@ class ArticleForm extends Form {
               }
             }}
           />
-          {this.state.data.title && (
+          {this.state.data.articleId && (
             <button
               type="button"
               onClick={() => this.props.onEdit(this.state.data)}
@@ -117,7 +118,7 @@ class ArticleForm extends Form {
               Update
             </button>
           )}
-          {!this.state.data.title && this.renderButton("Add Article")}
+          {!this.state.data.articleId && this.renderButton("Add Article")}
         </form>
       </div>
     );

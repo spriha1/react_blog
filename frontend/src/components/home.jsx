@@ -42,15 +42,11 @@ class Home extends Component {
     const originalArticles = [...this.state.articles];
     const a = originalArticles.filter(a => a.id == article.id);
     this.setState({ currentArticle: a[0] });
-    // console.log(a);
-    // const currentArticle = { ...this.state.articles[article.id] };
-    // this.setState({ currentArticle });
   };
 
   handleSearch = async e => {
     const articles = await article.searchArticles(this.searchRef.current.value);
     const searchArticles = [...articles];
-    // console.log(searchArticles);
     this.setState({ searchArticles });
   };
 
@@ -59,18 +55,16 @@ class Home extends Component {
   };
 
   handleEdit = async a => {
-    // console.log(a);
     const data = await article.updateArticle(a);
   };
 
   render() {
     const { articles, data, currentPage, currentArticle } = this.state;
-    const { user, element } = this.props;
+    const { user, element, match } = this.props;
     const pages = data ? _.range(1, data.last_page + 1) : [0];
-    // console.log(this.props);
     return (
       <React.Fragment>
-        {element && (
+        {element && match.params.article && (
           <ArticleForm
             formProps={this.props}
             currentArticle={currentArticle}
@@ -78,42 +72,54 @@ class Home extends Component {
             user={user}
           />
         )}
+        {element && !match.params.article && (
+          <ArticleForm
+            formProps={this.props}
+            onEdit={this.handleEdit}
+            user={user}
+          />
+        )}
         {!element && (
           <div className="row">
             {currentArticle && (
-              <div className="col-md-9">
-                <form className="form-inline mb-2 mt-2">
-                  <div className="input-group mb-2 mr-2">
-                    <input
-                      ref={this.searchRef}
-                      type="text"
-                      placeholder="Search"
-                      name="search"
-                      onChange={this.handleSearch}
-                    />
+              <div className="col-md-9 shadow p-3 mb-5 bg-white rounded">
+                <div className="sidebar-box search-form-wrap">
+                  <form className="form-inline search-form">
+                    <div className="input-group mb-2 mr-2">
+                      <span className="icon fa fa-search"></span>
+                      <input
+                        className="form-control"
+                        id="s"
+                        ref={this.searchRef}
+                        type="text"
+                        placeholder="Search"
+                        name="search"
+                        onChange={this.handleSearch}
+                      />
 
-                    <Select
-                      value={this.currentArticle}
-                      onChange={this.handleSelect}
-                      options={
-                        this.state.searchArticles &&
-                        this.state.searchArticles.map(a => ({
-                          label: a.title,
-                          value: a
-                        }))
-                      }
-                    />
-                  </div>
-                  {/* <button
+                      <Select
+                        value={this.currentArticle}
+                        onChange={this.handleSelect}
+                        options={
+                          this.state.searchArticles &&
+                          this.state.searchArticles.map(a => ({
+                            label: a.title,
+                            value: a
+                          }))
+                        }
+                      />
+                    </div>
+                    {/* <button
                 type="submit"
                 className="btn btn-primary mb-2"
                 onClick={this.handleSearch}
-              >
+                >
                 Submit
               </button> */}
-                </form>
+                  </form>
+                </div>
 
-                <div className="card mb-2">
+                <div className="card mb-2 shadow p-3 mb-5 bg-white rounded">
                   <div className="card-body">
                     <input type="hidden" name="id" value={currentArticle.id} />
                     <h5 className="card-title">{currentArticle.title}</h5>

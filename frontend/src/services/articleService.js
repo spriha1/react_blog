@@ -1,5 +1,6 @@
 import http from "./httpService";
 import { toast } from "react-toastify";
+import auth from "./authService";
 
 const apiEndpoint = "http://blogbackend.local.com/api/articles";
 const tokenKey = "token";
@@ -38,20 +39,23 @@ function toaster(status) {
 }
 
 export async function addArticle(article) {
-  // console.log("post");
-  const { data, status } = await http.post(apiEndpoint, article);
+  const user = await auth.getCurrentUser();
+  const { data, status } = await http.post(apiEndpoint, { article, user });
   await toaster(status);
   return data;
 }
 
 export async function updateArticle(article) {
-  // console.log("put");
-  const { data, status } = await http.put(apiEndpoint, article);
+  const user = await auth.getCurrentUser();
+  const { data, status } = await http.put(apiEndpoint, { article, user });
   await toaster(status);
 }
 
 export async function deleteArticle(id) {
-  const { status } = await http.delete(apiEndpoint + "/" + id);
+  const user = await auth.getCurrentUser();
+  const { status } = await http.delete(apiEndpoint + "/" + id, {
+    data: { user }
+  });
   await toaster(status);
   return status;
 }
@@ -61,8 +65,6 @@ export async function searchArticles(value) {
   //   const { data, status } = await http.post(apiEndpoint, { value: value });
   const { data } = await http.post(apiEndpoint, { value: value });
   return data;
-  // console.log(data);
-  // console.log(config.data);
 }
 
 export default {

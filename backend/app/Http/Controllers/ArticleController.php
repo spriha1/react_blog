@@ -18,36 +18,48 @@ class ArticleController extends Controller
 
     public function addArticle(Request $request)
     {
-        $article = new Article;
+        if($request->user['id'] == $request->article['userId']) {
+            $article = new Article;
 
-        $article->title = $request->title;
-        $article->details = $request->details;
-        $article->userId = $request->userId;
-        $article->save();
+            $article->title = $request->article['title'];
+            $article->details = $request->article['details'];
+            $article->userId = $request->article['userId'];
 
-        return response($article, 200);
-        // return $article;
+            $article->save();
+            return response($article, 200);
+        }
+
+        else {
+            return response("Invalid User", 422);
+        }
     }
 
     public function updateArticle(Request $request)
     {
-        // return $request->articleId;
-        $article = Article::find($request->articleId);
-        // return $article;
-        $article->title = $request->title;
-        $article->details = $request->details;
-        $article->userId = $request->userId;
-        $article->save();
+        if($request->user['id'] == $request->article['userId']) {
+            $article = Article::find($request->article['articleId']);
 
-        return response($article, 200);
-        // return $article;
+            $article->title = $request->article['title'];
+            $article->details = $request->article['details'];
+            $article->userId = $request->article['userId'];
+            
+            $article->save();
+            return response($article, 200);
+        }
+
+        else {
+            return response("Invalid User", 422);
+        }
     }
 
-    public function deleteArticle($id)
+    public function deleteArticle($id, Request $request)
     {
-        Article::destroy($id);
-        $response = 'Article deleted successfully';
-        return response($response, 200);
+        $article = Article::find($id);
+        if($article->userId == $request->user['id']) {
+            Article::destroy($id);
+            $response = 'Article deleted successfully';
+            return response($response, 200);
+        }
     }
 
     public function upload(Request $request)

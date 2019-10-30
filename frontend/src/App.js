@@ -35,7 +35,7 @@ class App extends Component {
     const { user } = this.state;
 
     return (
-      <div className="wrap">
+      <div className="wrap bg-white">
         <MetaTags>
           <title>Wordify</title>
           <meta charSet="utf-8" />

@@ -45,7 +45,7 @@ const NavBar = ({ user }) => {
     // </nav>
 
     <header role="banner">
-      <div className="top-bar">
+      {/* <div className="top-bar">
         <div className="container">
           <div className="row">
             <div className="col-3 search-top">
@@ -60,7 +60,7 @@ const NavBar = ({ user }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="container logo-wrap">
         <div className="row pt-5">
