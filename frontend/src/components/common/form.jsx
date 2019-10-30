@@ -19,6 +19,7 @@ class Form extends Component {
     for (let item of error.details) {
       errors[item.path[0]] = item.message;
     }
+    console.log(errors);
     return errors;
   };
 
@@ -55,7 +56,7 @@ class Form extends Component {
 
   renderButton(label) {
     return (
-      <button disabled={this.validate()} className="btn btn-primary">
+      <button disabled={this.validate()} className="btn btn-primary mt-2">
         {label}
       </button>
     );

@@ -18,7 +18,6 @@ import "./css/animate.css";
 import "./css/bootstrap.css";
 import "./css/style.css";
 import "./css/owl.carousel.min.css";
-import "./css/cdns.css";
 import "./fonts/flaticon/font/flaticon.css";
 import "./fonts/fontawesome/css/font-awesome.min.css";
 import "./fonts/ionicons/css/ionicons.min.css";

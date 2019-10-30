@@ -13,7 +13,7 @@ import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 class ArticleForm extends Form {
   state = {
-    data: { title: "", details: "", userId: "", token: "", articleId: "" },
+    data: { title: "", details: "", userId: "", token: "", articleId: -1 },
     errors: {}
   };
 
@@ -23,10 +23,12 @@ class ArticleForm extends Form {
       .label("Title"),
     details: Joi.required(),
     userId: Joi.number(),
-    token: Joi.string()
+    token: Joi.string(),
+    articleId: Joi.number()
   };
 
   componentDidMount() {
+    // console.log(this.props.user);
     if (this.props.user) {
       if (this.props.formProps.match.params) {
         var data = { ...this.state.data };
@@ -75,51 +77,54 @@ class ArticleForm extends Form {
 
     return (
       <div className="card mt-2 mb-2">
-        <h1>Article</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("userId", "User Id", "text", true)}
-          {this.renderInput("token", "Token", "text", true)}
-          {this.renderInput("articleId", "articleId", "text", true)}
+        <div className="card-body">
+          <h1>Article</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("userId", "User Id", "text", true)}
+            {this.renderInput("token", "Token", "text", true)}
+            {this.renderInput("articleId", "articleId", "text", true)}
 
-          {this.renderInput("title", "Title")}
-          <CKEditor
-            editor={ClassicEditor}
-            // data={this.state.data.details}
-            onInit={editor => {
-              editor.setData(this.state.data.details);
-              // You can store the "editor" and use when it is needed.
-            }}
-            onChange={(event, editor) => {
-              //   const data = editor.getData();
-              const data = { ...this.state.data };
-              data.details = editor.getData();
-              //   setArticle(data);
-              this.setState({ data });
-            }}
-            config={{
-              simpleUpload: {
-                // The URL that the images are uploaded to.
-                uploadUrl: "http://blogbackend.local.com/api/upload",
+            {this.renderInput("title", "Title")}
+            <CKEditor
+              editor={ClassicEditor}
+              // data={this.state.data.details}
+              onInit={editor => {
+                editor.setData(this.state.data.details);
+                // You can store the "editor" and use when it is needed.
+              }}
+              onChange={(event, editor) => {
+                //   const data = editor.getData();
+                const data = { ...this.state.data };
+                data.details = editor.getData();
+                //   setArticle(data);
+                this.setState({ data });
+              }}
+              config={{
+                simpleUpload: {
+                  // The URL that the images are uploaded to.
+                  uploadUrl: "http://blogbackend.local.com/api/upload",
 
-                // Headers sent along with the XMLHttpRequest to the upload server.
-                headers: {
-                  "X-CSRF-TOKEN": "CSRF-Token",
-                  Authorization: `Bearer${this.state.token}`
+                  // Headers sent along with the XMLHttpRequest to the upload server.
+                  headers: {
+                    "X-CSRF-TOKEN": "CSRF-Token",
+                    Authorization: `Bearer${this.state.token}`
+                  }
                 }
-              }
-            }}
-          />
-          {this.state.data.articleId && (
-            <button
-              type="button"
-              onClick={() => this.props.onEdit(this.state.data)}
-              className="btn btn-primary"
-            >
-              Update
-            </button>
-          )}
-          {!this.state.data.articleId && this.renderButton("Add Article")}
-        </form>
+              }}
+            />
+            {this.state.data.articleId > -1 && (
+              <button
+                type="button"
+                onClick={() => this.props.onEdit(this.state.data)}
+                className="btn btn-primary mt-2"
+              >
+                Update
+              </button>
+            )}
+            {this.state.data.articleId == -1 &&
+              this.renderButton("Add Article")}
+          </form>
+        </div>
       </div>
     );
   }
