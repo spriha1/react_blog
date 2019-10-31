@@ -8,6 +8,7 @@ import LoginForm from "./components/loginForm";
 import ContactForm from "./components/contactForm";
 import Home from "./components/home";
 import Logout from "./components/logout";
+import Profile from "./components/profile";
 import ArticleForm from "./components/articleForm";
 import auth from "./services/authService";
 // import NotFound from "./components/notFound";
@@ -30,6 +31,14 @@ class App extends Component {
     this.setState({ user });
   }
 
+  isLoggedIn() {
+    const user = auth.getCurrentUser();
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+
   render() {
     const { user } = this.state;
 
@@ -47,10 +56,49 @@ class App extends Component {
         <NavBar user={user} />
         <main className="container">
           <Switch>
-            <Route path="/register" component={RegisterForm}></Route>
-            <Route path="/login" component={LoginForm}></Route>
+            <Route
+              exact
+              path="/login"
+              render={props =>
+                !this.isLoggedIn() ? (
+                  <LoginForm />
+                ) : (
+                  <Home {...props} user={user} />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/register"
+              render={props =>
+                !this.isLoggedIn() ? (
+                  <RegisterForm />
+                ) : (
+                  <Home {...props} user={user} />
+                )
+              }
+            />
+
+            {/* <Route path="/register" component={RegisterForm}></Route>
+            <Route path="/login" component={LoginForm}></Route> */}
             <Route path="/contact" component={ContactForm}></Route>
             <Route path="/logout" component={Logout}></Route>
+            <Route
+              exact
+              path="/profile"
+              render={props =>
+                this.isLoggedIn() ? (
+                  <Profile />
+                ) : (
+                  <Home {...props} user={user} />
+                )
+              }
+            />
+            {/* <Route
+              path="/profile"
+              component={Profile}
+              onEnter={this.requireAuth}
+            ></Route> */}
             {/* <Route path="/addArticle" component={ArticleForm}></Route> */}
             {/* <Route
               path="/addArticle/:article?"

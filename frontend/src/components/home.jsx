@@ -71,7 +71,6 @@ class Home extends Component {
     articles[index] = { ...articles[index] };
     articles[index].title = data.title;
     articles[index].details = data.details;
-    console.log(articles[index]);
     this.setState({ articles });
     window.location.href = "/";
   };
