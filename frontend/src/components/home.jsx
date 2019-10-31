@@ -22,6 +22,14 @@ class Home extends Component {
     this.setState({ data, articles, currentArticle: articles[0] });
   }
 
+  async componentDidUpdate() {
+    const data = await article.getArticles();
+    const articles = data.data;
+    if (this.state.currentArticle.id != articles[0].id) {
+      this.setState({ currentArticle: articles[0], articles: articles });
+    }
+  }
+
   handleDelete = async id => {
     const status = await article.deleteArticle(id);
     if (status === 200) {
@@ -56,6 +64,7 @@ class Home extends Component {
 
   handleEdit = async a => {
     const data = await article.updateArticle(a);
+    console.log(data);
   };
 
   render() {
@@ -96,18 +105,19 @@ class Home extends Component {
                         name="search"
                         onChange={this.handleSearch}
                       />
-
-                      <Select
-                        value={this.currentArticle}
-                        onChange={this.handleSelect}
-                        options={
-                          this.state.searchArticles &&
-                          this.state.searchArticles.map(a => ({
-                            label: a.title,
-                            value: a
-                          }))
-                        }
-                      />
+                      {this.state.searchArticles && (
+                        <Select
+                          value={this.currentArticle}
+                          onChange={this.handleSelect}
+                          options={
+                            this.state.searchArticles &&
+                            this.state.searchArticles.map(a => ({
+                              label: a.title,
+                              value: a
+                            }))
+                          }
+                        />
+                      )}
                     </div>
                     {/* <button
                 type="submit"

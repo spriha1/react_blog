@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 // import { Editor } from "react-draft-wysiwyg";
 // import { EditorState, convertToRaw } from "draft-js";
 // import draftToHtml from "draftjs-to-html";
@@ -14,7 +14,8 @@ import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 class ArticleForm extends Form {
   state = {
     data: { title: "", details: "", userId: "", token: "", articleId: -1 },
-    errors: {}
+    errors: {},
+    showForm: true
   };
 
   schema = {
@@ -28,7 +29,6 @@ class ArticleForm extends Form {
   };
 
   componentDidMount() {
-    // console.log(this.props.user);
     if (this.props.user) {
       if (this.props.formProps.match.params) {
         var data = { ...this.state.data };
@@ -49,8 +49,11 @@ class ArticleForm extends Form {
     try {
       const { data } = this.state;
       await article.addArticle(data);
-      const { state } = this.props.location;
-      window.location = state ? state.from.pathname : "/";
+      this.setState({ showForm: false });
+      // return <Redirect to="/" />;
+      // const { state } = this.props.location;
+      // window.location = "/";
+      // window.location = state ? state.from.pathname : "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
@@ -69,64 +72,67 @@ class ArticleForm extends Form {
   }
 
   render() {
-    const { editorState } = this.state;
+    const { showForm } = this.state;
     // const { article } = this.props.match.params;
     // if (article) {
     //   console.log("hi", article);
     // }
+    if (showForm) {
+      return (
+        <div className="card mt-2 mb-2">
+          <div className="card-body">
+            <h1>Article</h1>
+            <form onSubmit={this.handleSubmit}>
+              {this.renderInput("userId", "User Id", "text", true)}
+              {this.renderInput("token", "Token", "text", true)}
+              {this.renderInput("articleId", "articleId", "text", true)}
 
-    return (
-      <div className="card mt-2 mb-2">
-        <div className="card-body">
-          <h1>Article</h1>
-          <form onSubmit={this.handleSubmit}>
-            {this.renderInput("userId", "User Id", "text", true)}
-            {this.renderInput("token", "Token", "text", true)}
-            {this.renderInput("articleId", "articleId", "text", true)}
+              {this.renderInput("title", "Title")}
+              <CKEditor
+                editor={ClassicEditor}
+                // data={this.state.data.details}
+                onInit={editor => {
+                  editor.setData(this.state.data.details);
+                  // You can store the "editor" and use when it is needed.
+                }}
+                onChange={(event, editor) => {
+                  //   const data = editor.getData();
+                  const data = { ...this.state.data };
+                  data.details = editor.getData();
+                  //   setArticle(data);
+                  this.setState({ data });
+                }}
+                config={{
+                  simpleUpload: {
+                    // The URL that the images are uploaded to.
+                    uploadUrl: "http://blogbackend.local.com/api/upload",
 
-            {this.renderInput("title", "Title")}
-            <CKEditor
-              editor={ClassicEditor}
-              // data={this.state.data.details}
-              onInit={editor => {
-                editor.setData(this.state.data.details);
-                // You can store the "editor" and use when it is needed.
-              }}
-              onChange={(event, editor) => {
-                //   const data = editor.getData();
-                const data = { ...this.state.data };
-                data.details = editor.getData();
-                //   setArticle(data);
-                this.setState({ data });
-              }}
-              config={{
-                simpleUpload: {
-                  // The URL that the images are uploaded to.
-                  uploadUrl: "http://blogbackend.local.com/api/upload",
-
-                  // Headers sent along with the XMLHttpRequest to the upload server.
-                  headers: {
-                    "X-CSRF-TOKEN": "CSRF-Token",
-                    Authorization: `Bearer${this.state.token}`
+                    // Headers sent along with the XMLHttpRequest to the upload server.
+                    headers: {
+                      "X-CSRF-TOKEN": "CSRF-Token",
+                      Authorization: `Bearer${this.state.token}`
+                    }
                   }
-                }
-              }}
-            />
-            {this.state.data.articleId > -1 && (
-              <button
-                type="button"
-                onClick={() => this.props.onEdit(this.state.data)}
-                className="btn btn-primary mt-2"
-              >
-                Update
-              </button>
-            )}
-            {this.state.data.articleId == -1 &&
-              this.renderButton("Add Article")}
-          </form>
+                }}
+              />
+              {this.state.data.articleId > -1 && (
+                <button
+                  type="button"
+                  onClick={() => this.props.onEdit(this.state.data)}
+                  className="btn btn-primary mt-2"
+                >
+                  Update
+                </button>
+              )}
+              {this.state.data.articleId == -1 &&
+                this.renderButton("Add Article")}
+            </form>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Redirect to="/" />;
+    }
   }
 }
 

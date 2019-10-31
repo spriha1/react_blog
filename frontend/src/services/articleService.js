@@ -49,6 +49,7 @@ export async function updateArticle(article) {
   const user = await auth.getCurrentUser();
   const { data, status } = await http.put(apiEndpoint, { article, user });
   await toaster(status);
+  return data;
 }
 
 export async function deleteArticle(id) {

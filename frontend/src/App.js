@@ -58,12 +58,14 @@ class App extends Component {
             ></Route> */}
             {/* <Route path="/" exact component={Home}></Route> */}
             <Route
+              exact
               path="/addArticle/:article?"
               render={props => (
                 <Home {...props} user={user} element={{ add: 1 }} />
               )}
             ></Route>
             <Route
+              exact
               path="/"
               render={props => <Home {...props} user={user} />}
             ></Route>
