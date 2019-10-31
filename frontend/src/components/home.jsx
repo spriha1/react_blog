@@ -64,7 +64,16 @@ class Home extends Component {
 
   handleEdit = async a => {
     const data = await article.updateArticle(a);
-    console.log(data);
+    const art = this.state.articles.filter(a => a.id == data.id);
+
+    const articles = [...this.state.articles];
+    const index = articles.indexOf(art);
+    articles[index] = { ...articles[index] };
+    articles[index].title = data.title;
+    articles[index].details = data.details;
+    console.log(articles[index]);
+    this.setState({ articles });
+    window.location.href = "/";
   };
 
   render() {
