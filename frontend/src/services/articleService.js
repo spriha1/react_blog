@@ -10,7 +10,6 @@ export async function getArticles(page) {
     var { data } = await http.get(apiEndpoint);
   } else {
     var { data } = await http.get(apiEndpoint + "?page=" + page);
-    // console.log("else", data.data);
   }
 
   if (data) {
@@ -20,7 +19,14 @@ export async function getArticles(page) {
   }
 }
 
-function toaster(status) {
+export async function getArticle(id) {
+  var { data } = await http.get(
+    "http://blogbackend.local.com/api/article/" + id
+  );
+  return data;
+}
+
+export function toaster(status) {
   return new Promise((resolve, reject) => {
     if (status !== 200) {
       toast.error("There is an error in completing the action !!!", {
@@ -73,5 +79,6 @@ export default {
   addArticle,
   updateArticle,
   deleteArticle,
-  searchArticles
+  searchArticles,
+  getArticle
 };

@@ -14,12 +14,14 @@ class Article extends Component {
           <input type="hidden" name="id" value={article.id} />
           <h5 className="card-title">{article.title}</h5>
           <p className="card-text">{article.excerpt}</p>
-          <button
-            className="btn btn-primary mr-2"
-            onClick={() => onRead(article)}
-          >
-            Read More ...
-          </button>
+          <Link to={`/${article.id}`}>
+            <button
+              className="btn btn-primary mr-2"
+              // onClick={() => onRead(article)}
+            >
+              Read More ...
+            </button>
+          </Link>
           {/* {user && user.id == article.userId && (
             <React.Fragment>
               <Link to={url} className="btn btn-primary mr-2">

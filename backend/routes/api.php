@@ -29,6 +29,7 @@ use Illuminate\Http\Request;
     Route::post('/login', 'Api\AuthController@login');
     Route::post('/register', 'Api\AuthController@register');
     Route::get('/articles', 'ArticleController@getArticles');
+    Route::get('/article/{id}', 'ArticleController@getArticle');
     Route::post('/upload', 'ArticleController@upload');
     Route::post('/search', 'ArticleController@search');
     

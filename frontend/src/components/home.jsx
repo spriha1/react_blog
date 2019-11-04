@@ -9,25 +9,38 @@ import Select from "react-select";
 import ArticleForm from "./articleForm";
 
 class Home extends Component {
-  state = { currentArticle: {} };
+  state = { currentArticle: {}, articleId: this.props.match.params.articleId };
 
   constructor(props) {
     super(props);
     this.searchRef = React.createRef();
   }
 
-  async componentDidMount() {
-    const data = await article.getArticles();
-    const articles = data.data;
-    this.setState({ data, articles, currentArticle: articles[0] });
+  async updateCurrentArticle() {
+    if (this.state.articleId) {
+      const currentArticle = await article.getArticle(this.state.articleId);
+      this.setState({ currentArticle });
+    } else {
+      const data = await article.getArticles();
+      const articles = data.data;
+      this.setState({ data, articles, currentArticle: articles[0] });
+      // if (this.state.currentArticle.id != articles[0].id) {
+      //   this.setState({ currentArticle: articles[0], articles: articles });
+      // }
+    }
   }
 
-  async componentDidUpdate() {
-    const data = await article.getArticles();
-    const articles = data.data;
-    if (this.state.currentArticle.id != articles[0].id) {
-      this.setState({ currentArticle: articles[0], articles: articles });
-    }
+  async componentDidMount() {
+    this.updateCurrentArticle();
+  }
+
+  componentWillReceiveProps(props) {
+    const articleId = props.location.pathname
+      .substring(props.location.pathname.lastIndexOf("/"))
+      .replace("/", "");
+    this.setState({ articleId }, function() {
+      this.updateCurrentArticle();
+    });
   }
 
   handleDelete = async id => {
@@ -42,14 +55,6 @@ class Home extends Component {
   onPageChange = async page => {
     const result = await article.getArticles(page);
     this.setState({ data: result, articles: result.data, currentPage: page });
-  };
-
-  handleClick = () => {};
-
-  handleRead = article => {
-    const originalArticles = [...this.state.articles];
-    const a = originalArticles.filter(a => a.id == article.id);
-    this.setState({ currentArticle: a[0] });
   };
 
   handleSearch = async e => {

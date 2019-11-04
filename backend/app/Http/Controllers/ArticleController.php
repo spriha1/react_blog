@@ -16,6 +16,12 @@ class ArticleController extends Controller
         return response($articles, 200);
     }
 
+    public function getArticle($id) 
+    {
+        $article = Article::find($id);
+        return response($article, 200);
+    }
+
     public function addArticle(Request $request)
     {
         if($request->user['id'] == $request->article['userId']) {
