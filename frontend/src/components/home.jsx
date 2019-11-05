@@ -132,17 +132,46 @@ class Home extends Component {
                         />
                       )}
                     </div>
-                    {/* <button
-                type="submit"
-                className="btn btn-primary mb-2"
-                onClick={this.handleSearch}
-                >
-                Submit
-              </button> */}
                   </form>
                 </div>
 
-                <div className="card mb-2 shadow p-3 mb-5 bg-white rounded">
+                <section className="site-section py-lg">
+                  <div className="container">
+                    <div className="row blog-entries">
+                      <div className="col-md-12 col-lg-8 main-content">
+                        <input
+                          type="hidden"
+                          name="id"
+                          value={currentArticle.id}
+                        />
+                        <h1 className="mb-4">{currentArticle.title}</h1>
+                        <div className="post-content-body">
+                          {parse(DOMPurify.sanitize(currentArticle.details))}
+                        </div>
+                        {user && user.id == currentArticle.userId && (
+                          <React.Fragment>
+                            <Link
+                              to={`/addArticle/${currentArticle.id}`}
+                              className="btn btn-info mr-2"
+                            >
+                              Edit
+                            </Link>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() =>
+                                this.handleDelete(currentArticle.id)
+                              }
+                            >
+                              Delete
+                            </button>
+                          </React.Fragment>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* <div className="card mb-2 shadow p-3 mb-5 bg-white rounded">
                   <div className="card-body">
                     <input type="hidden" name="id" value={currentArticle.id} />
                     <h5 className="card-title">{currentArticle.title}</h5>
@@ -157,12 +186,7 @@ class Home extends Component {
                         >
                           Edit
                         </Link>
-                        {/* <button
-                  className="btn btn-primary mr-2"
-                  onClick={() => onEdit(currentArticle)}
-                >
-                  Edit
-                </button> */}
+                        
                         <button
                           className="btn btn-danger"
                           onClick={() => this.handleDelete(currentArticle.id)}
@@ -172,41 +196,50 @@ class Home extends Component {
                       </React.Fragment>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
             <div className="col-md-3">
-              {articles &&
-                articles.map(article => (
-                  <Article
-                    key={article.id}
-                    article={article}
-                    user={user}
-                    onRead={this.handleRead}
-                    onEdit={this.handleEdit}
-                    onDelete={this.handleDelete}
-                  />
-                ))}
+              <div className="sidebar-box">
+                <h3 className="heading">Latest Posts</h3>
+                <div className="post-entry-sidebar">
+                  <ul>
+                    {articles &&
+                      articles.map(article => (
+                        <Article
+                          key={article.id}
+                          article={article}
+                          user={user}
+                          onRead={this.handleRead}
+                          onEdit={this.handleEdit}
+                          onDelete={this.handleDelete}
+                        />
+                      ))}
+                  </ul>
 
-              <nav>
-                <ul className="pagination">
-                  {pages.map(page => (
-                    <li
-                      key={page}
-                      className={
-                        page === currentPage ? "page-item active" : "page-item"
-                      }
-                    >
-                      <a
-                        className="page-link"
-                        onClick={() => this.onPageChange(page)}
-                      >
-                        {page}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+                  <nav>
+                    <ul className="pagination">
+                      {pages.map(page => (
+                        <li
+                          key={page}
+                          className={
+                            page === currentPage
+                              ? "page-item active"
+                              : "page-item"
+                          }
+                        >
+                          <a
+                            className="page-link"
+                            onClick={() => this.onPageChange(page)}
+                          >
+                            {page}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -15,13 +15,13 @@ import auth from "./services/authService";
 import About from "./components/about";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import "./css/animate.css";
-import "./css/bootstrap.css";
-import "./css/style.css";
-import "./css/owl.carousel.min.css";
-import "./fonts/flaticon/font/flaticon.css";
-import "./fonts/fontawesome/css/font-awesome.min.css";
-import "./fonts/ionicons/css/ionicons.min.css";
+// import "./css/animate.css";
+// import "./css/bootstrap.css";
+// import "./css/style.css";
+// import "./css/owl.carousel.min.css";
+// import "./fonts/flaticon/font/flaticon.css";
+// import "./fonts/fontawesome/css/font-awesome.min.css";
+// import "./fonts/ionicons/css/ionicons.min.css";
 
 class App extends Component {
   state = {};
