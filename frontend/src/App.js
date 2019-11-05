@@ -12,7 +12,7 @@ import Profile from "./components/profile";
 import ArticleForm from "./components/articleForm";
 import auth from "./services/authService";
 // import NotFound from "./components/notFound";
-// import About from "./components/about";
+import About from "./components/about";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import "./css/animate.css";
@@ -112,13 +112,13 @@ class App extends Component {
                 <Home {...props} user={user} element={{ add: 1 }} />
               )}
             ></Route>
+            <Route path="/about" component={About}></Route>
             <Route
               exact
               path="/:articleId?"
               render={props => <Home {...props} user={user} />}
             ></Route>
-            {/* <Route path="/about" component={About}></Route>
-            <Route path="/not-found" component={NotFound}></Route>
+            {/* <Route path="/not-found" component={NotFound}></Route>
             <Redirect to="/not-found" /> */}
           </Switch>
         </main>

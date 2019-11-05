@@ -11,7 +11,7 @@ class ArticleController extends Controller
     {
         $articles = Article::select('id', 'title', 'details', 'userId')
             ->orderBy('created_at', 'DESC')
-            ->paginate(5);
+            ->paginate(10);
         // $articles = Article::all();
         return response($articles, 200);
     }
@@ -70,12 +70,20 @@ class ArticleController extends Controller
 
     public function upload(Request $request)
     {
-        return($request->all());
+        if($request->hasFile('upload')) {
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('upload')->move(public_path('images'), $fileName);
+            $url = json_encode(['default' => asset('images/'.$fileName)]);
+
+            return json_encode(['urls' => ['default' => asset('images/'.$fileName)]]);
+        }
     }
 
     public function search(Request $request)
     {
-        // return $request->input('value');
         $articles = Article::where('title', 'like', '%' . $request->input('value') . '%')->get();
         return response($articles, 200);
     }
